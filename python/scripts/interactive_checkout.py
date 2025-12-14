@@ -2,6 +2,11 @@ from datetime import date
 from decimal import Decimal
 from pathlib import Path
 
+import sys
+
+_PYTHON_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(_PYTHON_ROOT))
+
 from cli_prompts import parse_date, parse_decimal, prompt_with_default, yes_no
 from csv_loaders import read_bundle_offers, read_cart, read_catalog, read_coupons, read_offers
 from model_objects import LoyaltyAccount
@@ -13,7 +18,8 @@ from fake_catalog import FakeCatalog
 
 def build_cart(catalog):
     cart = ShoppingCart()
-    cart_file = Path("cart.csv")
+    data_dir = _PYTHON_ROOT / "data"
+    cart_file = data_dir / "cart.csv"
     if cart_file.exists():
         try:
             for product, qty in read_cart(cart_file, catalog):
@@ -55,7 +61,8 @@ def build_cart(catalog):
 
 
 def configure_bundle_offers(teller, catalog):
-    bundles_file = Path("bundles.csv")
+    data_dir = _PYTHON_ROOT / "data"
+    bundles_file = data_dir / "bundles.csv"
     loaded = 0
     try:
         loaded = read_bundle_offers(bundles_file, teller, catalog)
@@ -103,7 +110,8 @@ def configure_bundle_offers(teller, catalog):
 
 
 def configure_coupon(teller, catalog):
-    coupons_file = Path("coupons.csv")
+    data_dir = _PYTHON_ROOT / "data"
+    coupons_file = data_dir / "coupons.csv"
     try:
         coupons = read_coupons(coupons_file, catalog)
     except Exception as exc:
@@ -171,14 +179,15 @@ def configure_loyalty():
 
 
 def main():
+    data_dir = _PYTHON_ROOT / "data"
     catalog = FakeCatalog()
-    read_catalog(Path("catalog.csv"), catalog)
+    read_catalog(data_dir / "catalog.csv", catalog)
     if not catalog.products:
-        print("No catalog found. Create a 'catalog.csv' in this folder first (columns: name, unit, price).")
+        print("No catalog found. Create a 'data/catalog.csv' first (columns: name, unit, price).")
         return
 
     teller = Teller(catalog)
-    read_offers(Path("offers.csv"), teller, catalog)
+    read_offers(data_dir / "offers.csv", teller, catalog)
 
     configure_bundle_offers(teller, catalog)
     configure_coupon(teller, catalog)

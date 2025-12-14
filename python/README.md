@@ -20,15 +20,15 @@ python -m unittest
 On the command line, enter the `SupermarketReceipt-Refactoring-Kata/python` directory and run
 
 ```
-python interactive_checkout.py
+python scripts/interactive_checkout.py
 ```
 
 This script lets you choose your cart and see the receipt with offers/bundles/coupons/loyalty applied.
 
-If present, `interactive_checkout.py` also loads:
-- `bundles.csv` (optional, predefined bundles)
-- `coupons.csv` (optional, predefined coupons)
-- `cart.csv` (optional, predefined cart)
+If present, `scripts/interactive_checkout.py` also loads from `data/`:
+- `data/bundles.csv` (optional, predefined bundles)
+- `data/coupons.csv` (optional, predefined coupons)
+- `data/cart.csv` (optional, predefined cart)
 
 ## Week 1 - Additional Discount Test Coverage
 
@@ -86,12 +86,12 @@ To prepare for bundles, coupons, and loyalty while keeping money handling precis
 
 To build a cart manually and print a receipt with offers/bundles/coupons/loyalty applied, run from `SupermarketReceipt-Refactoring-Kata/python`:
 ```
-python interactive_checkout.py
+python scripts/interactive_checkout.py
 ```
 
-This script uses `catalog.csv` (required) and `offers.csv` (optional) from the same folder, then prompts you to add bundles, coupons, cart items, and loyalty points.
+This script uses `data/catalog.csv` (required) and `data/offers.csv` (optional), then prompts you to add bundles, coupons, cart items, and loyalty points.
 You can press Enter to accept the suggested defaults (typical demo scenario).
 
 Example files are provided:
-- `catalog.csv` (products + units + prices)
-- `offers.csv` (classic special offers)
+- `data/catalog.csv` (products + units + prices)
+- `data/offers.csv` (classic special offers)
