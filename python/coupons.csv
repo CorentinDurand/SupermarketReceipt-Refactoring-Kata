@@ -1,0 +1,2 @@
+name,product,required_qty,discounted_qty,discount_percent,valid_from,valid_to,description
+orange_juice_coupon,orange juice,6,6,50,2025-12-13,2025-12-15,orange juice coupon

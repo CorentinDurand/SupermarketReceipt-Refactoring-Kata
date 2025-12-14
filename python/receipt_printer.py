@@ -1,4 +1,5 @@
 from model_objects import ProductUnit
+from decimal import Decimal, ROUND_HALF_UP
 
 class ReceiptPrinter:
 
@@ -15,6 +16,10 @@ class ReceiptPrinter:
             discount_presentation = self.print_discount(discount)
             result += discount_presentation
 
+        for payment in receipt.payments:
+            payment_presentation = self.print_payment(payment)
+            result += payment_presentation
+
         result += "\n"
         result += self.present_total(receipt)
         return str(result)
@@ -30,13 +35,15 @@ class ReceiptPrinter:
     def format_line_with_whitespace(self, name, value):
         line = name
         whitespace_size = self.columns - len(name) - len(value)
-        for i in range(whitespace_size):
+        for _ in range(whitespace_size):
             line += " "
         line += value
         line += "\n"
         return line
 
     def print_price(self, price):
+        if isinstance(price, Decimal):
+            return str(price.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP))
         return "%.2f" % price
 
     def print_quantity(self, item):
@@ -47,7 +54,12 @@ class ReceiptPrinter:
 
     def print_discount(self, discount):
         name = f"{discount.description} ({discount.product.name})"
-        value = self.print_price(discount.discount_amount)
+        value = self.print_price(discount.amount)
+        return self.format_line_with_whitespace(name, value)
+
+    def print_payment(self, payment):
+        name = payment.description
+        value = self.print_price(payment.amount)
         return self.format_line_with_whitespace(name, value)
 
     def present_total(self, receipt):
